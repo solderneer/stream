@@ -1,13 +1,13 @@
 import express from 'express'
-import http from 'http'
+import path from 'path'
 
-let app = express()
-let server = http.Server(app)
+const app = express()
+const port = 3000
 
 app.get('/', function (req, res) {
-  res.send('<h1>Hello!</h1>')
+  res.sendFile(path.join(__dirname, '../public/index.html'))
 })
 
-server.listen(3000, function () {
+app.listen(port, function () {
   console.log('Listening on *:3000')
 })
