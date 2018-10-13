@@ -9,10 +9,10 @@
 body {
   margin: 0px;
   padding: 0px;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
 }
 
 h1 {
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
 }
 </style>

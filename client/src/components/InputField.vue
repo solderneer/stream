@@ -4,42 +4,42 @@
 
 <script>
 export default {
-    name: 'InputField',
-    props: {
-        placeholder: String,
-        value: String,
-    }
-}
+  name: "InputField",
+  props: {
+    placeholder: String,
+    value: String
+  }
+};
 </script>
 
 <style scoped>
-input[type=text] {
-    outline: none;
-    padding-left: 10px;
-    
-    border-radius: 4px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: white;
+input[type="text"] {
+  outline: none;
+  padding-left: 10px;
 
-    margin: 5px 0px;
-    width: 100%;
-    height: 40px;
+  border-radius: 4px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: white;
 
-    background-color: transparent;
+  margin: 5px 0px;
+  width: 100%;
+  height: 40px;
 
-    color: white;
-    font-size: 13px;
+  background-color: transparent;
 
-    transition: border-width 0.2s;
+  color: white;
+  font-size: 13px;
+
+  transition: border-width 0.2s;
 }
 
-input[type=text]:focus {
-    transition: border-width 0.2s;
-    border-width: 3px;
+input[type="text"]:focus {
+  transition: border-width 0.2s;
+  border-width: 3px;
 }
 
 ::-webkit-input-placeholder {
-    color: white;
+  color: white;
 }
 </style>
