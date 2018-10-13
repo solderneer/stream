@@ -30,6 +30,13 @@ input[type=text] {
 
     color: white;
     font-size: 13px;
+
+    transition: border-width 0.2s;
+}
+
+input[type=text]:focus {
+    transition: border-width 0.2s;
+    border-width: 3px;
 }
 
 ::-webkit-input-placeholder {

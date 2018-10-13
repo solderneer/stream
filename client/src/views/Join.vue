@@ -4,8 +4,11 @@
             <logo/>
             <h1>Join a session</h1>
             <input-field v-model="sessionid" placeholder="Enter session ID"/>
-            <input-field v-model="nickname" placeholder="Enter your nickname here"/>
-            <button type="button">Submit</button>
+            <input-field v-model="nickname" placeholder="Enter nickname"/>
+            <div class="button-group">
+                <button-field>Admin mode</button-field>
+                <button-field>Submit</button-field>
+            </div>
         </div>
     </div>
 </template>
@@ -13,6 +16,7 @@
 <script>
 import Logo from '@/components/Logo.vue'
 import InputField from '@/components/InputField.vue'
+import ButtonField from '@/components/ButtonField.vue'
 export default {
     name: 'Join',
     data: function () {
@@ -24,6 +28,7 @@ export default {
     components: {
         Logo,
         InputField,
+        ButtonField,
     }
 }
 </script>
@@ -52,6 +57,13 @@ export default {
 h1 {
     color: white;
     margin: 10px;
-    font-weight: 300;
+    font-weight: 400;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
 }
 </style>
