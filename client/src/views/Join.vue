@@ -27,11 +27,11 @@ export default {
         this.admin = !this.admin;
 
         if (this.admin) {
-          this.header = "Create a session";
-          this.input = "Enter secret";
-        } else {
           this.header = "Join a session";
           this.input = "Enter session ID";
+        } else {
+          this.header = "Create a session";
+          this.input = "Enter secret";
         }
       } else if (button === 2) {
         // This is the submit logic
