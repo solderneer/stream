@@ -6,8 +6,8 @@
             <input-field v-model="input1" :placeholder="placeholder1"/>
             <input-field v-model="input2" :placeholder="placeholder2"/>
             <div class="button-group">
-                <button-field>{{ button1 }}</button-field>
-                <button-field>{{ button2 }}</button-field>
+                <button-field v-on:click="$emit('click', 1)">{{ button1 }}</button-field>
+                <button-field v-on:click="$emit('click', 2)">{{ button2 }}</button-field>
             </div>
         </div>
     </div>
