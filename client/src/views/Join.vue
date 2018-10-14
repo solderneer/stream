@@ -3,7 +3,7 @@
         <div class="form">
             <logo size="lg"/>
             <h1>{{ header }}</h1>
-            <input-field v-model="input1" :placeholder="placeholder"/>
+            <input-field v-model="input1" :placeholder="placeholder" :type="type"/>
             <input-field v-model="input2" placeholder="Enter nickname"/>
             <div class="button-group">
                 <button-field v-on:click="onClick(1)">{{ button }}</button-field>
@@ -29,6 +29,7 @@ export default {
       placeholder: 'Enter session ID',
       input1: '',
       input2: '',
+      type: 'text'
     };
   },
   components: {
@@ -44,17 +45,24 @@ export default {
         if (this.admin) {
           this.header = 'Create a session'
           this.placeholder = 'Enter secret'
+          this.type = 'password'
         } else {
           this.header = 'Join a session'
           this.placeholder = 'Enter session ID'
+          this.type = 'text'
         }
       } else if (button === 2) {
         // This is the submit logic
-        if (this.admin)
-          this.$router.push('/files')
+        if (this.admin) {
+          SessionService.create_session(this.input1, this.input2, function (res) {
+            if(res === 0) {
+              this.$router.push('/files')
+            }
+          }.bind(this))
+        }
         else {
-          SessionService.join_client(this.input1, this.input2, function (res) {
-            if(res === this.input1){
+          SessionService.join_session(this.input1, this.input2, function (res) {
+            if(res === 0){
               this.$router.push('/watch')
             }
           }.bind(this))

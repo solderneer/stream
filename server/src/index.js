@@ -1,6 +1,7 @@
 import express from 'express'
 import http from 'http'
 import socket from 'socket.io'
+import randomstring from 'randomstring'
 
 // Just some setup stuff
 const app = express()
@@ -10,20 +11,31 @@ const port = 3000
 
 const secret = 'password'
 
-let sessions = ['123', '1234']
+const SUCCESS = 0
+const FAIL = 1
+
+let sessions = []
 
 io.on('connection', function (socket) {
   console.log('Someone connected')
   socket.on('join', function (sessionid, nickname, callback) {
     let session = sessions.find((index) => { return index === sessionid })
     if (session) {
-      callback(sessionid)
+      callback(SUCCESS)
     } else {
-      callback()
+      callback(FAIL)
     }
   })
-  socket.on('create', function (secret, nickname) {
-    console.log('message: ' + secret + ' ' + nickname)
+  socket.on('create', function (usecret, nickname, callback) {
+    if (usecret === secret) {
+      sessions.push(randomstring.generate(7))
+      console.log('Admin connected')
+      console.log('New session ' + sessions[sessions.length - 1])
+      callback(SUCCESS)
+    } else {
+      console.log('Secret wrong')
+      callback(FAIL)
+    }
   })
 })
 

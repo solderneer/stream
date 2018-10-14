@@ -1,5 +1,5 @@
 <template>
-    <input :value="value" :placeholder="placeholder" v-on:input="$emit('input', $event.target.value)" type="text">
+    <input :value="value" :placeholder="placeholder" v-on:input="$emit('input', $event.target.value)" :type="type">
 </template>
 
 <script>
@@ -7,13 +7,14 @@ export default {
   name: "InputField",
   props: {
     placeholder: String,
-    value: String
+    value: String,
+    type: String,
   }
 };
 </script>
 
 <style scoped>
-input[type="text"] {
+input {
   outline: none;
   padding-left: 10px;
 
@@ -29,12 +30,12 @@ input[type="text"] {
   background-color: transparent;
 
   color: white;
-  font-size: 13px;
+  font-size: 14px;
 
   transition: border-width 0.2s;
 }
 
-input[type="text"]:focus {
+input:focus {
   transition: border-width 0.2s;
   border-width: 3px;
 }
