@@ -1,5 +1,9 @@
 <template>
-    <input :value="value" :placeholder="placeholder" v-on:input="$emit('input', $event.target.value)" :type="type">
+    <input :value="value" 
+    :placeholder="placeholder" 
+    v-on:input="$emit('input', $event.target.value)" 
+    :type="type" 
+    v-on:keyup.enter="$emit('submit')" />
 </template>
 
 <script>
@@ -8,7 +12,7 @@ export default {
   props: {
     placeholder: String,
     value: String,
-    type: String,
+    type: String
   }
 };
 </script>

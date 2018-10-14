@@ -1,7 +1,7 @@
 <template>
     <div class="bottombar">
         <logo size="sm" />
-        <input-field class="chatbox" type="text" placeholder="Press enter to send" v-model="message"/>
+        <input-field class="chatbox" type="text" placeholder="Press enter to send" v-model="message" v-on:submit="onSend"/>
         <button-field class="button" v-on:click="onSend">Send</button-field>
         <button-field class="button" v-on:click="$emit('exit')">Exit</button-field>
     </div>
