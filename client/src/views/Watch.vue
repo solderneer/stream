@@ -4,7 +4,7 @@
             <source src="http://jplayer.org/video/webm/Big_Buck_Bunny_Trailer.webm" type="video/webm">
             <source src="http://jplayer.org/video/m4v/Big_Buck_Bunny_Trailer.m4v" type="video/mp4">
         </video>
-        <bottom-bar class="bottombar"/>
+        <bottom-bar v-on:exit="onReturn" v-on:send="onSend" v-class="bottombar"/>
     </div>
 </template>
 
@@ -12,6 +12,9 @@
 import Logo from '@/components/Logo.vue'
 import ButtonField from '@/components/ButtonField.vue'
 import BottomBar from '@/components/BottomBar.vue'
+
+import MessageService from '@/services/MessageService.js'
+
 export default {
     name: 'Watch',
     components: {
@@ -19,9 +22,17 @@ export default {
         Logo,
         BottomBar,
     },
+    data: function () {
+        return {
+            message: '',
+        }
+    },
     methods: {
         onReturn: function () {
             this.$router.push('/')
+        },
+        onSend: function (msg) {
+            MessageService.send(msg)
         }
     }
 }

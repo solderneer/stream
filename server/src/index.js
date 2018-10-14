@@ -17,7 +17,7 @@ let sessions = []
 let users = {}
 
 class UserType {
-  constructor (nickname, sessionid, isadmin) {
+  constructor(nickname, sessionid, isadmin) {
     this.nickname = nickname
     this.sessionid = sessionid
     this.isadmin = isadmin
@@ -53,13 +53,17 @@ io.on('connection', function (socket) {
       callback(FAIL)
     }
   })
+  socket.on('message', function (msg) {
+    console.log(msg)
+  })
   socket.on('disconnect', function () {
-    console.log(users[socket.id].nickname + ' disconnected')
+    // Need to check for user existing befor this
+    /* console.log(users[socket.id].nickname + ' disconnected')
     if (users[socket.id].isadmin === true) {
       // emit event to disconnect all people from room and delete room
     } else {
       // inform all people in the room that this person has disconnected
-    }
+    } */
   })
 })
 

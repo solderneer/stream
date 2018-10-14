@@ -1,9 +1,9 @@
 <template>
     <div class="bottombar">
         <logo size="sm" />
-        <input-field class="chatbox" type="text" placeholder="Press enter to send"/>
-        <button-field class="button">Send</button-field>
-        <button-field class="button">Exit</button-field>
+        <input-field class="chatbox" type="text" placeholder="Press enter to send" v-model="message"/>
+        <button-field class="button" v-on:click="onSend">Send</button-field>
+        <button-field class="button" v-on:click="$emit('exit')">Exit</button-field>
     </div>
 </template>
 
@@ -18,6 +18,17 @@ export default {
         ButtonField,
         Logo,
     },
+    data: function () {
+        return {
+            message: '',
+        }
+    },
+    methods: {
+        onSend: function() {
+            this.$emit('send', this.message)
+            this.message = ''
+        }
+    }
 }
 </script>
 
