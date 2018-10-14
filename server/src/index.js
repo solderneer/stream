@@ -17,7 +17,7 @@ let sessions = []
 let users = {}
 
 class UserType {
-  constructor(nickname, sessionid, isadmin) {
+  constructor (nickname, sessionid, isadmin) {
     this.nickname = nickname
     this.sessionid = sessionid
     this.isadmin = isadmin
