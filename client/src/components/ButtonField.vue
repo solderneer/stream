@@ -10,7 +10,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 button {
   outline: none;
   border: none;
@@ -20,8 +20,6 @@ button {
 
   height: 40px;
   width: 90%;
-  margin: 10px;
-  margin-top: 20px;
 
   box-shadow: rgba(0, 0, 0, 0.05) 0 5px 20px;
   transition: box-shadow 0.5s;

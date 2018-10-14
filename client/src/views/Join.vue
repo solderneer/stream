@@ -2,12 +2,12 @@
     <div class="container">
         <div class="form">
             <logo size="lg"/>
-            <h1>{{ header }}</h1>
-            <input-field v-model="input1" :placeholder="placeholder" :type="type"/>
-            <input-field v-model="input2" placeholder="Enter nickname"/>
+            <input-field class="input" v-model="input1" :placeholder="placeholder" :type="type"/>
+            <input-field class="input" v-model="input2" placeholder="Enter nickname"/>
+            <span class="error"> {{ error }}</span>
             <div class="button-group">
-                <button-field v-on:click="onClick(1)">{{ button }}</button-field>
-                <button-field v-on:click="onClick(2)">Create</button-field>
+                <button-field class="button" v-on:click="onClick(1)">{{ button }}</button-field>
+                <button-field class="button" v-on:click="onClick(2)">Create</button-field>
             </div>
         </div>
     </div>
@@ -29,7 +29,8 @@ export default {
       placeholder: 'Enter session ID',
       input1: '',
       input2: '',
-      type: 'text'
+      type: 'text',
+      error: '',
     };
   },
   components: {
@@ -54,16 +55,20 @@ export default {
       } else if (button === 2) {
         // This is the submit logic
         if (this.admin) {
-          SessionService.create_session(this.input1, this.input2, function (res) {
+          SessionService.create_session(this.input1, this.input2, function (res, err) {
             if(res === 0) {
               this.$router.push('/files')
+            } else {
+              this.error = err
             }
           }.bind(this))
         }
         else {
-          SessionService.join_session(this.input1, this.input2, function (res) {
+          SessionService.join_session(this.input1, this.input2, function (res, err) {
             if(res === 0){
               this.$router.push('/watch')
+            } else {
+              this.error = err
             }
           }.bind(this))
         }
@@ -78,12 +83,12 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .container {
   display: flex;
   justify-content: center;
-  align-items: center;
   background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+  align-items: center;
   height: 100vh;
   width: 100vw;
 }
@@ -105,6 +110,17 @@ h1 {
   flex-direction: row;
   justify-content: center;
   width: 100%;
+}
+.button {
+  margin: 10px;
+}
+.input {
+  margin: 5px 0px;
+}
+.error {
+  color: white;
+  font-size: 15px;
+  margin: 5px;
 }
 </style>
 

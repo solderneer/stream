@@ -2,7 +2,6 @@
 <div class="container">
     <div class="form">
         <logo size="lg"/>
-        <h1>Select movie</h1>
         <drop-down/>
         <buttom-field v-on:click="onCreate">Create</buttom-field>
     </div>
@@ -48,11 +47,4 @@ export default {
   background-color: transparent;
   padding: 20px;
 }
-
-h1 {
-  color: white;
-  margin: 10px;
-  font-weight: 400;
-}
-
 </style>

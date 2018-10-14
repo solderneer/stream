@@ -23,7 +23,6 @@ input {
   border-width: 1px;
   border-color: white;
 
-  margin: 5px 0px;
   width: 100%;
   height: 40px;
 

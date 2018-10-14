@@ -27,8 +27,9 @@ class UserType {
 io.on('connection', function (socket) {
   console.log('Someone connected')
   socket.on('join', function (sessionid, nickname, callback) {
+    // Input validation
     let session = sessions.find((index) => { return index === sessionid })
-    if (session) {
+    if (session && !(nickname === '')) {
       socket.join(session, () => {
         users[socket.id] = new UserType(nickname, sessionid, false)
         io.to(session).emit('connect', nickname + ' joined room ' + session)
@@ -36,11 +37,12 @@ io.on('connection', function (socket) {
       })
       callback(SUCCESS)
     } else {
-      callback(FAIL)
+      callback(FAIL, 'Session doesn\'t exist')
     }
   })
   socket.on('create', function (usecret, nickname, callback) {
-    if (usecret === secret) {
+    // Needs input validation
+    if ((usecret === secret) && !(nickname === '')) {
       let sessionid = randomstring.generate(7)
       sessions.push(sessionid)
       users[socket.id] = new UserType(nickname, sessionid, true)
@@ -53,6 +55,11 @@ io.on('connection', function (socket) {
   })
   socket.on('disconnect', function () {
     console.log(users[socket.id].nickname + ' disconnected')
+    if (users[socket.id].isadmin === true) {
+      // emit event to disconnect all people from room and delete room
+    } else {
+      // inform all people in the room that this person has disconnected
+    }
   })
 })
 
