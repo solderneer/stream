@@ -4,13 +4,13 @@
         <logo size="lg"/>
         <h1>Select movie</h1>
         <drop-down/>
-        <buttom-field>Create</buttom-field>
+        <buttom-field v-on:click="onCreate">Create</buttom-field>
     </div>
 </div>
 </template>
 
 <script>
-import Logo from "@/components/Logo.vue";
+import Logo from '@/components/Logo.vue';
 import DropDown from '@/components/DropDown.vue'
 import ButtomField from '@/components/ButtonField.vue'
 
@@ -20,6 +20,11 @@ export default {
         DropDown,
         Logo,
         ButtomField,
+    },
+    methods: {
+        onCreate: function () {
+            this.$router.push('/watch')
+        }
     }
 }
 </script>
