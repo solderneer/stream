@@ -19,6 +19,10 @@ export default {
 </script>
 
 <style scoped>
+li {
+    list-style: none;
+    display: flex;
+}
 .chatbox {
     list-style: none;
     color: black;
@@ -29,15 +33,22 @@ export default {
 }
 
 .messagebox {
-    background: white;
+    display: inline-block;
+    background-color: rgb(231, 231, 231) ; 
     padding: 10px;
+
+    min-width: 10%;
     max-width: 30%;
+
     border-radius: 20px;
-    margin: 10px 10px;
+    margin: 5px 10px;
+    color: black;
 }
 
 .self {
     margin-left: auto;
+    background-color: #4bc3ff;
+    color: white;
 }
 
 .name {

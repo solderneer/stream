@@ -1,9 +1,9 @@
 <template>
     <div class="container">
-        <!--video id="my-video" crossorigin="anonymous" autoplay>
+        <video id="my-video" crossorigin="anonymous" autoplay>
             <source src="http://jplayer.org/video/webm/Big_Buck_Bunny_Trailer.webm" type="video/webm">
             <source src="http://jplayer.org/video/m4v/Big_Buck_Bunny_Trailer.m4v" type="video/mp4">
-        </video-->
+        </video>
         <div class="overlay">
             <chat-window :messages="messages" class="chatwindow"/>
             <bottom-bar v-on:exit="onReturn" v-on:send="onSend" class="bottombar"/>
