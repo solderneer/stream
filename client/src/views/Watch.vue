@@ -31,16 +31,6 @@ export default {
         return {
             message: '',
             messages: [
-                {
-                    name: 'Sudharshan',
-                    content: 'Hello',
-                    self: false,
-                },
-                {
-                    name: 'Isaac Tay',
-                    content: 'THIS MOVIE SUCKS',
-                    self: false,
-                },
             ],
         }
     },
@@ -54,9 +44,28 @@ export default {
                 content: msg,
                 self: true,
             })
-            // MessageService.send(msg)
-        }
-    }
+            let index = this.messages.length - 1
+            // Remove the element after 5 seconds
+            setTimeout(() => {
+                this.messages.splice(index, 1)
+            }, 5000)
+            MessageService.send(msg)
+        },
+    },
+    mounted: function () {
+        MessageService.receive(function (message) {
+            this.messages.push({
+                name: message.name,
+                content: message.content,
+                self: false,
+            })
+            let index = this.messages.length - 1
+            // Remove the element after 5 seconds
+            setTimeout(() => {
+                this.messages.splice(index, 1)
+            }, 5000)
+        }.bind(this))
+    },
 }
 </script>
 

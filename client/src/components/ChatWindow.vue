@@ -14,7 +14,7 @@ export default {
     name: 'ChatWindows',
     props: {
         messages: Array,
-    },
+    }
 }
 </script>
 

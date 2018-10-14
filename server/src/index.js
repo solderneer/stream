@@ -45,8 +45,11 @@ io.on('connection', function (socket) {
     if ((usecret === secret) && !(nickname === '')) {
       let sessionid = randomstring.generate(7)
       sessions.push(sessionid)
-      users[socket.id] = new UserType(nickname, sessionid, true)
       console.log('New session ' + sessionid)
+      socket.join(sessionid, () => {
+        users[socket.id] = new UserType(nickname, sessionid, true)
+        console.log(users)
+      })
       callback(SUCCESS)
     } else {
       console.log('Secret wrong')
@@ -55,10 +58,17 @@ io.on('connection', function (socket) {
   })
   socket.on('message', function (msg) {
     console.log(msg)
+    if (!(msg === '')) {
+      socket.broadcast.to(users[socket.id].sessionid).emit('message', {
+        name: users[socket.id].nickname,
+        content: msg
+      })
+      console.log(SUCCESS)
+    }
   })
   socket.on('disconnect', function () {
     // Need to check for user existing befor this
-    /* console.log(users[socket.id].nickname + ' disconnected')
+    console.log('Someone disconnected')/*
     if (users[socket.id].isadmin === true) {
       // emit event to disconnect all people from room and delete room
     } else {
