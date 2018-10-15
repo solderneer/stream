@@ -33,6 +33,7 @@ button:hover {
 .text {
   text-transform: uppercase;
   background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-family: "Raleway";

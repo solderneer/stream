@@ -34,11 +34,13 @@ li {
 
 .messagebox {
     display: inline-block;
+    word-wrap: break-word;
     background-color: rgb(231, 231, 231) ; 
     padding: 10px;
 
-    min-width: 10%;
-    max-width: 30%;
+    min-width: 5%;
+    max-width: 40%;
+    margin-left: auto;
 
     border-radius: 20px;
     margin: 5px 10px;

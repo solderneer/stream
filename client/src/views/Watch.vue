@@ -70,7 +70,7 @@ export default {
 
 <style scoped>
 .container {
-  background-color: white;
+  background-color: whitet;
   /* background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%); */
   height: 100vh;
   width: 100vw;
