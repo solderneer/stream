@@ -40,7 +40,8 @@ export default {
     align-content: center;
 
     width: 100%;
-    background: rgba(0, 0, 0, 0.6);
+    background-image: linear-gradient(120deg, rgba(132, 250, 175, 0.8) 0%, rgba(143, 210, 244, 0.8) 100%);
+    border-radius: 30px 30px 0px 0px;
 }
 
 .logo {
