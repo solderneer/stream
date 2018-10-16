@@ -40,15 +40,14 @@ li {
 
     min-width: 5%;
     max-width: 40%;
-    margin-left: auto;
 
     border-radius: 20px;
     margin: 5px 10px;
+    margin-left: auto;
     color: black;
 }
 
 .self {
-    margin-left: auto;
     background-color: #4bc3ff;
     color: white;
 }
