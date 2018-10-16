@@ -21,6 +21,10 @@ io.on('connection', function (socket) {
     let res = SessionHandler.create(io, socket, usecret, nickname)
     callback(res)
   })
+  socket.on('isuser', function (callback) {
+    let res = SessionHandler.isuser(socket)
+    callback(res)
+  })
   socket.on('message', function (msg) {
     MessageHandler.send(socket, msg)
   })

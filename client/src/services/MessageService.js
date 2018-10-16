@@ -12,5 +12,5 @@ function receive(callback) {
 
 export default {
     send,
-    receive
+    receive,
 }

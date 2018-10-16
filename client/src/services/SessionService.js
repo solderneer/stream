@@ -26,6 +26,12 @@ function create_session(secret, nickname, callback) {
     }
 }
 
+function isuser(callback) {
+    socket.emit('isuser', (res) => {
+        callback(res)
+    })
+}
+
 function leave_session() {
     socket.close()
 }
@@ -33,5 +39,6 @@ function leave_session() {
 export default {
     join_session,
     create_session,
+    isuser,
     leave_session,
 }

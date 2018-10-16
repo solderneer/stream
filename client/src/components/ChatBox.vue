@@ -1,9 +1,10 @@
 <template>
     <div class="chatinput">
-        <input placeholder="Write message here..." 
+        <input :placeholder="placeholder" 
         type="text" 
         v-on:input="$emit('input', $event.target.value)"
         :value="value"
+        :disabled="disabled"
         v-on:keyup.enter="$emit('submit')"/>
         <span class="fa fa-smile-o"></span>
         <span v-on:click="$emit('submit')" class="fa fa-paper-plane-o"></span>
@@ -14,7 +15,13 @@
 export default {
   name: "ChatBox",
   props: {
-    value: String
+    value: String,
+    disabled: Boolean,
+  },
+  computed: {
+    placeholder: function() {
+      return (this.disabled) ? 'Not connected to a session' : 'Write message here...'
+    }
   }
 };
 </script>

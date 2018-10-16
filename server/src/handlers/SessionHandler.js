@@ -36,5 +36,9 @@ export default {
   },
   getuser: function (socket) {
     return users[socket.id]
-  }
+  },
+  isuser: function (socket) {
+    console.log(!(users[socket.id] === undefined))
+    return !(users[socket.id] === undefined)
+  },
 }

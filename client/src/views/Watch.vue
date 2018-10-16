@@ -6,7 +6,7 @@
         </video>
         <div class="overlay">
             <chat-window :messages="messages" class="chatwindow"/>
-            <bottom-bar v-on:exit="onReturn" v-on:send="onSend" class="bottombar"/>
+            <bottom-bar v-on:exit="onReturn" v-on:send="onSend" :disabled="disabled" class="bottombar"/>
         </div>
     </div>
 </template>
@@ -33,6 +33,7 @@ export default {
             message: '',
             messages: [
             ],
+            disabled: false,
         }
     },
     methods: {
@@ -58,20 +59,26 @@ export default {
         },
     },
     mounted: function () {
-        MessageService.receive(function (message) {
-            // Input validation
-            if (message === '') {
-                return
+        SessionService.isuser(function (res) {
+            if(res) {
+                MessageService.receive(function (message) {
+                    // Input validation
+                    if (message === '') {
+                        return
+                    }
+                    this.messages.push({
+                        name: message.name,
+                        content: message.content,
+                        self: false,
+                    })
+                    // Remove the element after 5 seconds
+                    setTimeout(() => {
+                        this.messages.shift()
+                    }, 5000)
+                }.bind(this))
+            } else {
+                this.disabled = true;
             }
-            this.messages.push({
-                name: message.name,
-                content: message.content,
-                self: false,
-            })
-            // Remove the element after 5 seconds
-            setTimeout(() => {
-                this.messages.shift()
-            }, 5000)
         }.bind(this))
     },
 }

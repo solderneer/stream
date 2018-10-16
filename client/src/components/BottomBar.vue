@@ -1,7 +1,7 @@
 <template>
     <div class="bottombar">
         <logo size="xs" />
-        <chat-box v-model="message" v-on:submit="onSend" class="chatbox"/>
+        <chat-box v-model="message" v-on:submit="onSend" class="chatbox" :disabled="disabled"/>
     </div>
 </template>
 
@@ -28,6 +28,9 @@ export default {
             this.$emit('send', this.message)
             this.message = ''
         }
+    },
+    props: {
+        disabled: Boolean,
     }
 }
 </script>
