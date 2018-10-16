@@ -28,9 +28,12 @@ io.on('connection', function (socket) {
   socket.on('message', function (msg) {
     MessageHandler.send(socket, msg)
   })
+  socket.on('exit', function () {
+    SessionHandler.exit(io, socket)
+  })
   socket.on('disconnect', function () {
-    // Need to check for user existing befor this
     console.log('Someone disconnected')
+    SessionHandler.exit(io, socket)
   })
 })
 

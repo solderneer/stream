@@ -33,7 +33,7 @@ function isuser(callback) {
 }
 
 function leave_session() {
-    socket.close()
+    socket.emit('exit')
 }
 
 export default {

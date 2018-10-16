@@ -41,4 +41,11 @@ export default {
     console.log(!(users[socket.id] === undefined))
     return !(users[socket.id] === undefined)
   },
+  exit: function (io, socket) {
+    // Need to check for admin status and kick out people in room accordingly
+    if (!(users[socket.id] === undefined)) {
+      delete users[socket.id]
+      console.log(users)
+    }
+  }
 }
