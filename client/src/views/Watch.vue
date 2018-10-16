@@ -40,31 +40,37 @@ export default {
             SessionService.leave_session()
             this.$router.push('/')
         },
-        onSend: function (msg) {
+        onSend: function (message) {
+            // Input validation
+            if (message === '') {
+                return
+            }
             this.messages.push({
                 name: '',
-                content: msg,
+                content: message,
                 self: true,
             })
-            let index = this.messages.length - 1
             // Remove the element after 5 seconds
-            setTimeout(() => {
-                this.messages.splice(index, 1)
+            setTimeout((message) => {
+                this.messages.shift()
             }, 5000)
-            MessageService.send(msg)
+            MessageService.send(message)
         },
     },
     mounted: function () {
         MessageService.receive(function (message) {
+            // Input validation
+            if (message === '') {
+                return
+            }
             this.messages.push({
                 name: message.name,
                 content: message.content,
                 self: false,
             })
-            let index = this.messages.length - 1
             // Remove the element after 5 seconds
             setTimeout(() => {
-                this.messages.splice(index, 1)
+                this.messages.shift()
             }, 5000)
         }.bind(this))
     },
