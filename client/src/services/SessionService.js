@@ -26,7 +26,12 @@ function create_session(secret, nickname, callback) {
     }
 }
 
+function leave_session() {
+    socket.close()
+}
+
 export default {
     join_session,
-    create_session
+    create_session,
+    leave_session,
 }

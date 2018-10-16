@@ -14,14 +14,12 @@
 export default {
   name: "ChatBox",
   props: {
-    value: String,
+    value: String
   }
 };
 </script>
 
 <style scoped>
-@import url("//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css");
-
 .chatinput {
   display: flex;
   flex-direction: row;
