@@ -46,6 +46,8 @@ export default {
     if (!(users[socket.id] === undefined)) {
       delete users[socket.id]
       console.log(users)
+    } else {
+      console.log('Someone left')
     }
   }
 }

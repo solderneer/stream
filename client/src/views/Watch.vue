@@ -1,9 +1,10 @@
 <template>
     <div class="container">
         <floating-button class="exit" v-on:click="onReturn"/>
-        <video id="my-video" data-dashjs-player autoplay controls src="https://dash.akamaized.net/envivio/EnvivioDash3/manifest.mpd"></video>
+        <video id="my-video" data-dashjs-player autoplay src="https://dash.akamaized.net/envivio/EnvivioDash3/manifest.mpd"></video>
         <div class="overlay">
             <chat-window :messages="messages" class="chatwindow"/>
+            <progress-bar max="100" value="80"></progress-bar>
             <bottom-bar v-on:exit="onReturn" v-on:send="onSend" :disabled="disabled" class="bottombar"/>
         </div>
     </div>
@@ -14,6 +15,7 @@ import Logo from '@/components/Logo.vue'
 import BottomBar from '@/components/BottomBar.vue'
 import ChatWindow from '@/components/ChatWindow.vue'
 import FloatingButton from '@/components/FloatingButton.vue'
+import ProgressBar from '@/components/ProgressBar.vue'
 
 import SessionService from '@/services/SessionService.js'
 import MessageService from '@/services/MessageService.js'
@@ -25,6 +27,7 @@ export default {
         BottomBar,
         ChatWindow,
         FloatingButton,
+        ProgressBar,
     },
     data: function () {
         return {

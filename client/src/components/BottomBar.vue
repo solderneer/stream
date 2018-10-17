@@ -43,8 +43,8 @@ export default {
     align-content: center;
 
     width: 100%;
-    /* background-image: linear-gradient(120deg, rgba(132, 250, 175, 0.8) 0%, rgba(143, 210, 244, 0.8) 100%); */
-    background-color: rgba(0, 0, 0, 0.6);
+    background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.8) 100%);
+    /* background-color: rgba(0, 0, 0, 0.6);*/
 }
 
 .logo {
@@ -52,6 +52,6 @@ export default {
 }
 .chatbox {
     width: 100%;
-    margin: 10px 5px 10px 5px;
+    margin: 13px 5px 10px 5px;
 }
 </style>

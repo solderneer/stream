@@ -32,7 +32,7 @@ io.on('connection', function (socket) {
     SessionHandler.exit(io, socket)
   })
   socket.on('disconnect', function () {
-    console.log('Someone disconnected')
+    console.log('Someone left')
     SessionHandler.exit(io, socket)
   })
 })
