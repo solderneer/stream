@@ -1,9 +1,7 @@
 <template>
     <div class="container">
         <floating-button class="exit" v-on:click="onReturn"/>
-        <video id="my-video" crossorigin="anonymous" autoplay>
-            <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
-        </video>
+        <video id="my-video" data-dashjs-player autoplay controls src="https://dash.akamaized.net/envivio/EnvivioDash3/manifest.mpd"></video>
         <div class="overlay">
             <chat-window :messages="messages" class="chatwindow"/>
             <bottom-bar v-on:exit="onReturn" v-on:send="onSend" :disabled="disabled" class="bottombar"/>
@@ -86,7 +84,7 @@ export default {
 
 <style scoped>
 .container {
-  background-color: whitet;
+  background-color: black;
   /* background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%); */
   height: 100vh;
   width: 100vw;
