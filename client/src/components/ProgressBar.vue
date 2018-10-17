@@ -1,7 +1,7 @@
 <template>
   <div class="progressbar">
     <progress id="progress" :max="max" :value="value"></progress>
-    <div id="scrubber" v-bind:style="{left: (value-0.5) + '%'}"></div>
+    <div id="scrubber" v-bind:style="{left: position + '%'}"></div>
   </div>
 </template>
 
@@ -12,14 +12,19 @@ export default {
     max: String,
     value: String,
   },
+  computed: {
+    position: function () {
+      return (this.value/this.max) * 100
+    },
+  },
   mounted: function () {
     let container = document.querySelector('.progressbar')
     let progressbar = document.querySelector('#progress')
     let scrubber = document.querySelector('#scrubber')
 
-    let width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
     let dragactive = false
 
+    // Hovering stuff (should move this to css)
     container.addEventListener('mouseover', function() {
       scrubber.style.display = 'block'
       container.style.margin = '0px 0px -18px 0px';
@@ -30,6 +35,7 @@ export default {
       container.style.margin = '0px 0px -2px 0px';
     })
 
+    // Dragging stuff
     scrubber.addEventListener('mousedown', function() {
       dragactive = true
     })
@@ -40,9 +46,17 @@ export default {
 
     container.addEventListener('mousemove', function() {
       if (dragactive) {
+        let width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
         let position = event.clientX/width
         this.$emit('drag', position)
       }
+    }.bind(this))
+
+    // Clicking stuff
+    container.addEventListener('click', function() {
+      let width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
+      let position = event.clientX/width
+      this.$emit('jump', position)
     }.bind(this))
   },
 };
