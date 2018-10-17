@@ -4,7 +4,7 @@
         <video id="my-video" data-dashjs-player autoplay src="https://dash.akamaized.net/envivio/EnvivioDash3/manifest.mpd"></video>
         <div class="overlay">
             <chat-window :messages="messages" class="chatwindow"/>
-            <progress-bar max="100" value="80"></progress-bar>
+            <progress-bar :max="max.toString()" :value="value.toString()" v-on:drag="onDrag"></progress-bar>
             <bottom-bar v-on:exit="onReturn" v-on:send="onSend" :disabled="disabled" class="bottombar"/>
         </div>
     </div>
@@ -35,6 +35,8 @@ export default {
             messages: [
             ],
             disabled: false,
+            value: 10,
+            max: 100,
         }
     },
     methods: {
@@ -57,6 +59,9 @@ export default {
                 this.messages.shift()
             }, 5000)
             MessageService.send(message)
+        },
+        onDrag: function (position) {
+            this.value = position * this.max
         },
     },
     mounted: function () {
