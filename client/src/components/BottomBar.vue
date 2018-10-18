@@ -54,4 +54,10 @@ export default {
     width: 100%;
     margin: 13px 5px 10px 5px;
 }
+
+.fa {
+    margin: auto 10px;
+    width: 20px;
+    color: white;
+}
 </style>

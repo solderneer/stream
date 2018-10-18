@@ -1,7 +1,15 @@
 <template>
-    <div class="container">
-        <floating-button class="exit" v-on:click="onReturn"/>
-        <!--video id="my-video" data-dashjs-player autoplay controls src="http://localhost:1000/Deadpool/Deadpool.mpd"></video-->
+    <div id="container">
+        <span class="exit">
+            <floating-button v-on:click="onReturn">
+                <span class="text text-sm fa fa-times"></span>
+            </floating-button>
+        </span>
+        <span class="play">
+            <floating-button v-on:click="onToggle">
+                <span class="text text-lg fa" v-bind:class="{ 'fa-play': play, 'fa-pause': !play }"></span>
+            </floating-button>
+        </span>
         <video id="my-video"></video> 
         <div class="overlay">
             <chat-window :messages="messages" class="chatwindow"/>
@@ -40,6 +48,7 @@ export default {
             max: 100,
             video: null,
             url: 'http://localhost:1000/Deadpool/Deadpool.mpd',
+            play: false,
         }
     },
     methods: {
@@ -69,6 +78,14 @@ export default {
         },
         onJump: function (position) {
             this.video.currentTime = position * this.max
+        },
+        onToggle: function () {
+            if(this.play) {
+                this.video.play()
+            } else {
+                this.video.pause()
+            }
+            this.play = !this.play
         }
     },
     mounted: function () {
@@ -100,6 +117,7 @@ export default {
         this.video = document.querySelector('#my-video')
         dash.initialize(this.video, this.url, true)
 
+        // Progress bar support
         this.video.addEventListener('durationchange', function() {
             this.max = this.video.duration
             this.video.addEventListener('timeupdate', function() {
@@ -111,7 +129,7 @@ export default {
 </script>
 
 <style scoped>
-.container {
+#container {
   background-color: black;
   /* background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%); */
   height: 100vh;
@@ -136,6 +154,26 @@ export default {
     top: 0px;
     bottom: 0px;
     margin: 20px;
+
+    /* Make it circular */
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.play {
+    position: absolute;
+    margin: auto 0px;
+
+    /* Make it circular */
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+    overflow: hidden;
+
+    z-index: 1;
+    display: block;
 }
 
 #my-video {

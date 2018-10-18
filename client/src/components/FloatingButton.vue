@@ -1,12 +1,15 @@
 <template>
     <button type="button" v-on:click="$emit('click')">
-        <span class="text fa fa-times"></span>
+        <slot />
     </button>
 </template>
 
 <script>
 export default {
-    name: 'FloatingButton'
+    name: 'FloatingButton',
+    props: {
+        fontsize: String,
+    }
 }
 </script>
 
@@ -15,12 +18,11 @@ button {
     outline: none;
     border: none;
 
-    border-radius: 15px;
     background-color: rgba(0, 0, 0, 0.6);
     color: white;
 
-    height: 30px;
-    width: 30px;
+    height: 100%;
+    width: 100%;
 
     box-shadow: rgba(0, 0, 0, 0.05) 0 5px 20px;
     transition: box-shadow 0.5s;
@@ -34,8 +36,12 @@ button:hover {
   transition: box-shadow 0.5s;
 }
 
-.text {
-  font-size: 20px;
+.text-sm {
+    font-size: 20px;
+}
+
+.text-lg {
+    font-size: 50px;
 }
 
 button:hover .text::before {
