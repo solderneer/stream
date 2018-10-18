@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <floating-button class="exit" v-on:click="onReturn"/>
-        <video id="my-video" data-dashjs-player autoplay src="https://dash.akamaized.net/envivio/EnvivioDash3/manifest.mpd"></video>
+        <video id="my-video" data-dashjs-player autoplay src="http://localhost:1000/Deadpool/Deadpool.mpd"></video>
         <div class="overlay">
             <chat-window :messages="messages" class="chatwindow"/>
             <progress-bar :max="max.toString()" :value="value.toString()" v-on:drag="onDrag" v-on:jump="onJump"></progress-bar>

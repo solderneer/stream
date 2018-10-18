@@ -16,8 +16,8 @@ services:
     ports:
       - "80:8080"
   file-server:
-    image: nginx:1.14.0-alpine
+    build: ./file-server
     volumes:
-      - ./movies:/usr/share/nginx/html:ro 
+      - ./movies:/etc/nginx/movies
     ports:
       - "1000:80"
