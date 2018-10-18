@@ -1,7 +1,8 @@
 <template>
     <div class="container">
         <floating-button class="exit" v-on:click="onReturn"/>
-        <video id="my-video" data-dashjs-player autoplay src="http://localhost:1000/Deadpool/Deadpool.mpd"></video>
+        <!--video id="my-video" data-dashjs-player autoplay controls src="http://localhost:1000/Deadpool/Deadpool.mpd"></video-->
+        <video id="my-video"></video> 
         <div class="overlay">
             <chat-window :messages="messages" class="chatwindow"/>
             <progress-bar :max="max.toString()" :value="value.toString()" v-on:drag="onDrag" v-on:jump="onJump"></progress-bar>
@@ -35,8 +36,10 @@ export default {
             messages: [
             ],
             disabled: false,
-            value: 10,
+            value: 0,
             max: 100,
+            video: null,
+            url: 'http://localhost:1000/Deadpool/Deadpool.mpd',
         }
     },
     methods: {
@@ -55,19 +58,21 @@ export default {
                 self: true,
             })
             // Remove the element after 5 seconds
-            setTimeout((message) => {
+            setTimeout(() => {
                 this.messages.shift()
             }, 5000)
             MessageService.send(message)
         },
         onDrag: function (position) {
             this.value = position * this.max
+            this.video.currentTime = position * this.max
         },
         onJump: function (position) {
-            this.value = position * this.max
+            this.video.currentTime = position * this.max
         }
     },
     mounted: function () {
+        // Setting up events for message handling
         SessionService.isuser(function (res) {
             if(res) {
                 MessageService.receive(function (message) {
@@ -89,6 +94,18 @@ export default {
                 this.disabled = true;
             }
         }.bind(this))
+
+        // Setting up video element
+        let dash = dashjs.MediaPlayer().create()
+        this.video = document.querySelector('#my-video')
+        dash.initialize(this.video, this.url, true)
+
+        this.video.addEventListener('durationchange', function() {
+            this.max = this.video.duration
+            this.video.addEventListener('timeupdate', function() {
+                this.value = this.video.currentTime
+            }.bind(this))
+        }.bind(this));
     },
 }
 </script>
