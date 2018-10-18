@@ -5,13 +5,19 @@ services:
     build: ./server
     command: npm run dev
     volumes: 
-     - ./server:/app
+      - ./server:/app
     ports: 
-     - "3000:3000"
+      - "3000:3000"
   frontend:
     build: ./client
     command: npm run serve
     volumes:
-     - ./client:/app
+      - ./client:/app
     ports:
-     - "80:8080"
+      - "80:8080"
+  file-server:
+    image: nginx:1.14.0-alpine
+    volumes:
+      - ./movies:/usr/share/nginx/html:ro 
+    ports:
+      - "1000:80"

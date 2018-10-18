@@ -92,7 +92,8 @@ progress[value]::-webkit-progress-value {
   height: 15px;
   width: 15px;
   border-radius: 7px;
-  background-color: rgba(143, 210, 244, 1);
+  /*background-color: rgba(143, 210, 244, 1);*/
+  background-color: white;
 
   bottom: 12px;
 }
