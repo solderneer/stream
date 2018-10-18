@@ -117,6 +117,11 @@ export default {
   height: 100vh;
   width: 100vw;
   overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .overlay {
@@ -126,6 +131,7 @@ export default {
 }
 
 .exit {
+    align-self: flex-start;
     position: absolute;
     top: 0px;
     bottom: 0px;
