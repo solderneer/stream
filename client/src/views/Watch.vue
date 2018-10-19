@@ -10,7 +10,7 @@
                 <span class="text text-lg fa" v-bind:class="{ 'fa-play': play, 'fa-pause': !play }"></span>
             </floating-button>
         </span>
-        <video id="my-video"></video> 
+        <video id="my-video" autoplay></video> 
         <div class="overlay">
             <chat-window :messages="messages" class="chatwindow"/>
             <progress-bar :max="max.toString()" :value="value.toString()" v-on:drag="onDrag" v-on:jump="onJump"></progress-bar>
