@@ -28,6 +28,7 @@ import ProgressBar from '@/components/ProgressBar.vue'
 
 import SessionService from '@/services/SessionService.js'
 import MessageService from '@/services/MessageService.js'
+import SyncService from '@/services/SyncService.js'
 
 export default {
     name: 'Watch',
@@ -82,8 +83,16 @@ export default {
         onToggle: function () {
             if(this.play) {
                 this.video.play()
+                // Video sync
+                if(this.$route.params.state === 'admin') {
+                    SyncService.playall()
+                }
             } else {
                 this.video.pause()
+                // Video sync
+                if(this.$route.params.state === 'admin') {
+                    SyncService.pauseall()
+                }
             }
             this.play = !this.play
         }
@@ -92,6 +101,7 @@ export default {
         // Setting up events for message handling
         SessionService.isuser(function (res) {
             if(res) {
+                // Message related callbacks
                 MessageService.receive(function (message) {
                     // Input validation
                     if (message === '') {
@@ -107,6 +117,25 @@ export default {
                         this.messages.shift()
                     }, 5000)
                 }.bind(this))
+
+                if(this.$route.params.state === 'client') {
+                    // Video stream related client callbacks
+                    SyncService.gettime(function (time) {
+                        if(abs(time - this.video.currentTime) > 1) {
+                            this.video.currentTime = time
+                        }
+                    }.bind(this))
+
+                    SyncService.onplay(function () {
+                        this.video.play()
+                        this.play = false // Show pause button
+                    }.bind(this))
+
+                    SyncService.onpause(function () {
+                        this.video.pause()
+                        this.play = true // Show play button
+                    }.bind(this))
+                }
             } else {
                 this.disabled = true;
             }
@@ -122,6 +151,11 @@ export default {
             this.max = this.video.duration
             this.video.addEventListener('timeupdate', function() {
                 this.value = this.video.currentTime
+                
+                // Video sync
+                if(this.$route.params.state === 'admin') {
+                    SyncService.sendtime(this.video.currentTime)
+                }
             }.bind(this))
         }.bind(this));
     },

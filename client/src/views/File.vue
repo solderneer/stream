@@ -22,7 +22,7 @@ export default {
     },
     methods: {
         onCreate: function () {
-            this.$router.push('/watch')
+            this.$router.push('/watch/admin')
         }
     }
 }

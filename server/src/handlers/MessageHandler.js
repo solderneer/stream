@@ -5,7 +5,7 @@ export default {
   send: function (socket, msg) {
     let user = SessionHandler.getuser(socket)
     console.log(user)
-    if (user === null) {
+    if (user === undefined) {
       console.log('Socket not connected')
       return FAIL
     } else if (msg === '') {

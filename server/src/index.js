@@ -5,6 +5,7 @@ import {port} from './options.js'
 
 import SessionHandler from './handlers/SessionHandler.js'
 import MessageHandler from './handlers/MessageHandler.js'
+import SyncHandler from './handlers/SyncHandler.js'
 
 // Just some setup stuff
 const app = express()
@@ -27,6 +28,15 @@ io.on('connection', function (socket) {
   })
   socket.on('message', function (msg) {
     MessageHandler.send(socket, msg)
+  })
+  socket.on('videotime', function (time) {
+    SyncHandler.sendtime(socket, time)
+  })
+  socket.on('play', function () {
+    SyncHandler.play(socket)
+  })
+  socket.on('pause', function () {
+    SyncHandler.pause(socket)
   })
   socket.on('exit', function () {
     SessionHandler.exit(io, socket)

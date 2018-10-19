@@ -66,7 +66,7 @@ export default {
         else {
           SessionService.join_session(this.input1, this.input2, function (res, err) {
             if(res === 0){
-              this.$router.push('/watch')
+              this.$router.push('/watch/client')
             } else {
               this.error = err
             }
