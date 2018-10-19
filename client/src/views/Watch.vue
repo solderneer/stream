@@ -121,7 +121,7 @@ export default {
                 if(this.$route.params.state === 'client') {
                     // Video stream related client callbacks
                     SyncService.gettime(function (time) {
-                        if(abs(time - this.video.currentTime) > 1) {
+                        if(abs(time - this.video.currentTime) > 0.1) {
                             this.video.currentTime = time
                         }
                     }.bind(this))
