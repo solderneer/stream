@@ -2,7 +2,7 @@
 <div class="container">
     <div class="form">
         <logo size="lg"/>
-        <drop-down/>
+        <drop-down :elements="elements"/>
         <buttom-field v-on:click="onCreate">Create</buttom-field>
     </div>
 </div>
@@ -13,6 +13,8 @@ import Logo from '@/components/Logo.vue';
 import DropDown from '@/components/DropDown.vue'
 import ButtomField from '@/components/ButtonField.vue'
 
+import FileService from '@/services/FileService.js'
+
 export default {
     name: 'File',
     components: {
@@ -20,11 +22,19 @@ export default {
         Logo,
         ButtomField,
     },
+    data: function () {
+        return {
+            elements: [],
+        }
+    },
     methods: {
         onCreate: function () {
             this.$router.push('/watch/admin')
         }
-    }
+    },
+    mounted: async function () {
+        this.elements = await FileService.getfilelist()
+    },
 }
 </script>
 
