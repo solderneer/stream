@@ -6,18 +6,39 @@ services:
     command: npm run dev
     volumes: 
       - ./server:/app
-    ports: 
-      - "3000:3000"
+    networks:
+      - web
+      - default
+    labels:
+      - "traefik.backend=stream_backend"
+      - "traefik.docker.network=web"
+      - "traefik.basic.frontend.rule=Host:backend.solderneer.me"
+      - "traefik.enable=true"
+      - "traefik.basic.port=3000"
   frontend:
     build: ./client
     command: npm run serve
     volumes:
       - ./client:/app
-    ports:
-      - "80:8080"
+    networks:
+      - web
+      - default
+    labels:
+      - "traefik.backend=stream_frontend"
+      - "traefik.docker.network=web"
+      - "traefik.basic.frontend.rule=Host:stream.solderneer.me"
+      - "traefik.enable=true"
+      - "traefik.basic.port=80"
   file-server:
     build: ./file-server
     volumes:
       - ./movies:/etc/nginx/movies
-    ports:
-      - "1000:80"
+    networks:
+      - web
+      - default
+    labels:
+      - "traefik.backend=stream_media"
+      - "traefik.docker.network=web"
+      - "traefik.basic.frontend.rule=Host:media.solderneer.me"
+      - "traefik.enable=true"
+      - "traefik.basic.port=80"
