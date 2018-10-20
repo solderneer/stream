@@ -10,7 +10,7 @@
                 <span class="text text-lg fa" v-bind:class="{ 'fa-play': play, 'fa-pause': !play }"></span>
             </floating-button>
         </span>
-        <video id="my-video" autoplay></video> 
+        <video id="my-video"></video>
         <div class="overlay">
             <chat-window :messages="messages" class="chatwindow"/>
             <progress-bar :max="max.toString()" :value="value.toString()" v-on:drag="onDrag" v-on:jump="onJump"></progress-bar>
@@ -49,7 +49,7 @@ export default {
             max: 100,
             video: null,
             url: 'http://localhost:1000/Deadpool/Deadpool.mpd',
-            play: false,
+            play: true,
         }
     },
     methods: {
@@ -101,7 +101,7 @@ export default {
         // Setting up events for message handling
         SessionService.isuser(function (res) {
             if(res) {
-                // Message related callbacks
+                // Message related callbacks for both admin and client
                 MessageService.receive(function (message) {
                     // Input validation
                     if (message === '') {
@@ -118,10 +118,27 @@ export default {
                     }, 5000)
                 }.bind(this))
 
+                 // Setting up video element for both admin and client
+                let dash = dashjs.MediaPlayer().create()
+                this.video = document.querySelector('#my-video')
+                dash.initialize(this.video, this.url, true)
+
+                 // Progress bar support with time sync for admin
+                this.video.addEventListener('durationchange', function() {
+                    this.max = this.video.duration
+                    this.video.addEventListener('timeupdate', function() {
+                        this.value = this.video.currentTime
+                        // Video sync
+                        if(this.$route.params.state === 'admin') {
+                            SyncService.sendtime(this.video.currentTime)
+                        }
+                    }.bind(this))
+                }.bind(this));
+
                 if(this.$route.params.state === 'client') {
                     // Video stream related client callbacks
                     SyncService.gettime(function (time) {
-                        if(abs(time - this.video.currentTime) > 0.1) {
+                        if(abs(time - this.video.currentTime) > 0.05) {
                             this.video.currentTime = time
                         }
                     }.bind(this))
@@ -136,28 +153,13 @@ export default {
                         this.play = true // Show play button
                     }.bind(this))
                 }
+
+                // Pause the video
+                this.video.pause()
             } else {
                 this.disabled = true;
             }
         }.bind(this))
-
-        // Setting up video element
-        let dash = dashjs.MediaPlayer().create()
-        this.video = document.querySelector('#my-video')
-        dash.initialize(this.video, this.url, true)
-
-        // Progress bar support
-        this.video.addEventListener('durationchange', function() {
-            this.max = this.video.duration
-            this.video.addEventListener('timeupdate', function() {
-                this.value = this.video.currentTime
-                
-                // Video sync
-                if(this.$route.params.state === 'admin') {
-                    SyncService.sendtime(this.video.currentTime)
-                }
-            }.bind(this))
-        }.bind(this));
     },
 }
 </script>

@@ -7,17 +7,8 @@
 <script>
 export default {
     name: 'DropDown',
-    data: function () {
-        return {
-            elements: [
-                {message: 'hi'},
-                {message: 'hello'},
-            ],
-            selected: 'Select a movie'
-        }
-    },
     props: {
-        title: String,
+        elements: Array,
     },
 }
 </script>
