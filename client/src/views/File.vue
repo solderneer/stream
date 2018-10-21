@@ -2,7 +2,10 @@
 <div class="container">
     <div class="form">
         <logo size="lg"/>
-        <drop-down :elements="elements"/>
+        <select v-model="selected">
+            <option disabled value="">Selected a movie</option>
+            <option v-for="element in elements" :key="element">{{ element }}</option>
+        </select>
         <buttom-field v-on:click="onCreate">Create</buttom-field>
     </div>
 </div>
@@ -25,6 +28,7 @@ export default {
     data: function () {
         return {
             elements: [],
+            selected: '',
         }
     },
     methods: {
