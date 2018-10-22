@@ -3,7 +3,7 @@
     <div class="form">
         <logo size="lg"/>
         <select v-model="selected">
-            <option disabled value="">Selected a movie</option>
+            <option disabled value="">Select a movie</option>
             <option v-for="element in elements" :key="element">{{ element }}</option>
         </select>
         <buttom-field v-on:click="onCreate">Create</buttom-field>
@@ -33,7 +33,7 @@ export default {
     },
     methods: {
         onCreate: function () {
-            this.$router.push('/watch/admin')
+            this.$router.push('/watch/admin/' + this.selected)
         }
     },
     mounted: async function () {

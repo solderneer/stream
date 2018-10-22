@@ -48,7 +48,7 @@ export default {
             value: 0,
             max: 100,
             video: null,
-            url: 'http://localhost:1000/Deadpool/Deadpool.mpd',
+            url: '',
             play: true,
         }
     },
@@ -98,6 +98,9 @@ export default {
         }
     },
     mounted: function () {
+        // Build the url
+        let movie = this.$route.params.movie
+        this.url = "https://movies.solderneer.me/" + movie + '/' + movie + '.mpd'
         // Setting up events for message handling
         SessionService.isuser(function (res) {
             if(res) {
@@ -138,7 +141,7 @@ export default {
                 if(this.$route.params.state === 'client') {
                     // Video stream related client callbacks
                     SyncService.gettime(function (time) {
-                        if(abs(time - this.video.currentTime) > 0.05) {
+                        if(Math.abs(time - this.video.currentTime) > 0.05) {
                             this.video.currentTime = time
                         }
                     }.bind(this))

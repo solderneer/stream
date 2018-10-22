@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export default {
     getfilelist: async function () {
-        let res = await axios.get('http://localhost:1000/')
+        let res = await axios.get('https://movies.solderneer.me')
 
         // Extracting list
         let container = document.createElement('html')
@@ -10,7 +10,8 @@ export default {
         let nodelist = [...container.getElementsByTagName('a')]
 
         return nodelist.map(function (elem) {
-            return elem.innerText
+            let string = elem.innerText
+            return string.slice(0, -1);
         })
     },
 }
