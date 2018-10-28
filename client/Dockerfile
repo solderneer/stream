@@ -2,10 +2,12 @@ FROM node:10-alpine
 
 WORKDIR /app
 COPY package*.json ./
-
-EXPOSE 8080
 RUN npm install
 
-# COPY . . 
-CMD [ "npm", "run serve"]
+COPY . . 
+RUN npm run build
+
+
+FROM nginx:1.14.0-alpine
+COPY --from=0 /app/dist /usr/share/nginx/html
 
