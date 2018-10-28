@@ -19,7 +19,6 @@ export default {
   },
   mounted: function () {
     let container = document.querySelector('.progressbar')
-    let progressbar = document.querySelector('#progress')
     let scrubber = document.querySelector('#scrubber')
 
     let dragactive = false

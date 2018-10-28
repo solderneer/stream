@@ -20,7 +20,7 @@ export default new Router({
       component: File,
     },
     {
-      path: '/watch/:state',
+      path: '/watch/:state/:movie',
       name: 'watch',
       component: Watch,
     }
