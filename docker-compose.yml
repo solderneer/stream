@@ -9,7 +9,7 @@ services:
     labels:
       - "traefik.backend=stream_backend"
       - "traefik.docker.network=web"
-      - "traefik.basic.frontend.rule=Host:backend.solderneer.me"
+      - "traefik.basic.frontend.rule=Host:streamserver.solderneer.me"
       - "traefik.enable=true"
       - "traefik.basic.port=3000"
   frontend:

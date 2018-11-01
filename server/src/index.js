@@ -10,7 +10,10 @@ import SyncHandler from './handlers/SyncHandler.js'
 // Just some setup stuff
 const app = express()
 const server = http.createServer(app)
-const io = socket(server, { origins: 'http://localhost:80' })
+const io = socket(server)
+
+// CORS support
+io.origins('*:*')
 
 io.on('connection', function (socket) {
   console.log('Someone connected')
