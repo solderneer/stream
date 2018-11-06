@@ -5,9 +5,9 @@
                 <span class="text text-sm fa fa-times"></span>
             </floating-button>
         </span>
-        <span class="play">
+        <span class="play" v-bind:class="{ 'hidden': !admin }">
             <floating-button v-on:click="onToggle">
-                <span class="text text-lg fa" v-bind:class="{ 'fa-play': play, 'fa-pause': !play, 'hidden': !admin}"></span>
+                <span class="text text-lg fa" v-bind:class="{ 'fa-play': play, 'fa-pause': !play }"></span>
             </floating-button>
         </span>
         <video id="my-video"></video>
@@ -48,7 +48,7 @@ export default {
       max: 100,
       video: null,
       url: "",
-      play: false,
+      play: true,
       admin: false,
     };
   },
@@ -144,6 +144,7 @@ export default {
                 "durationchange",
                 function() {
                   this.max = this.video.duration;
+                  this.video.pause();
                   this.video.addEventListener(
                     "timeupdate",
                     function() {
