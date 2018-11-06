@@ -20,151 +20,165 @@
 </template>
 
 <script>
-import Logo from '@/components/Logo.vue'
-import BottomBar from '@/components/BottomBar.vue'
-import ChatWindow from '@/components/ChatWindow.vue'
-import FloatingButton from '@/components/FloatingButton.vue'
-import ProgressBar from '@/components/ProgressBar.vue'
+import Logo from "@/components/Logo.vue";
+import BottomBar from "@/components/BottomBar.vue";
+import ChatWindow from "@/components/ChatWindow.vue";
+import FloatingButton from "@/components/FloatingButton.vue";
+import ProgressBar from "@/components/ProgressBar.vue";
 
-import SessionService from '@/services/SessionService.js'
-import MessageService from '@/services/MessageService.js'
-import SyncService from '@/services/SyncService.js'
+import SessionService from "@/services/SessionService.js";
+import MessageService from "@/services/MessageService.js";
+import SyncService from "@/services/SyncService.js";
 
 export default {
-    name: 'Watch',
-    components: {
-        Logo,
-        BottomBar,
-        ChatWindow,
-        FloatingButton,
-        ProgressBar,
+  name: "Watch",
+  components: {
+    Logo,
+    BottomBar,
+    ChatWindow,
+    FloatingButton,
+    ProgressBar
+  },
+  data: function() {
+    return {
+      message: "",
+      messages: [],
+      disabled: false,
+      value: 0,
+      max: 100,
+      video: null,
+      url: "",
+      play: false
+    };
+  },
+  methods: {
+    onReturn: function() {
+      SessionService.leave_session();
+      this.$router.push("/");
     },
-    data: function () {
-        return {
-            message: '',
-            messages: [
-            ],
-            disabled: false,
-            value: 0,
-            max: 100,
-            video: null,
-            url: '',
-            play: true,
+    onSend: function(message) {
+      // Input validation
+      if (message === "") {
+        return;
+      }
+      this.messages.push({
+        name: "",
+        content: message,
+        self: true
+      });
+      // Remove the element after 5 seconds
+      setTimeout(() => {
+        this.messages.shift();
+      }, 5000);
+      MessageService.send(message);
+    },
+    onDrag: function(position) {
+      this.value = position * this.max;
+      this.video.currentTime = position * this.max;
+    },
+    onJump: function(position) {
+      this.video.currentTime = position * this.max;
+    },
+    onToggle: function() {
+      if (this.play) {
+        this.video.play();
+        // Video sync
+        if (this.$route.params.state === "admin") {
+          SyncService.playall();
         }
-    },
-    methods: {
-        onReturn: function () {
-            SessionService.leave_session()
-            this.$router.push('/')
-        },
-        onSend: function (message) {
-            // Input validation
-            if (message === '') {
-                return
-            }
-            this.messages.push({
-                name: '',
-                content: message,
-                self: true,
-            })
-            // Remove the element after 5 seconds
-            setTimeout(() => {
-                this.messages.shift()
-            }, 5000)
-            MessageService.send(message)
-        },
-        onDrag: function (position) {
-            this.value = position * this.max
-            this.video.currentTime = position * this.max
-        },
-        onJump: function (position) {
-            this.video.currentTime = position * this.max
-        },
-        onToggle: function () {
-            if(this.play) {
-                this.video.play()
-                // Video sync
-                if(this.$route.params.state === 'admin') {
-                    SyncService.playall()
-                }
-            } else {
-                this.video.pause()
-                // Video sync
-                if(this.$route.params.state === 'admin') {
-                    SyncService.pauseall()
-                }
-            }
-            this.play = !this.play
+      } else {
+        this.video.pause();
+        // Video sync
+        if (this.$route.params.state === "admin") {
+          SyncService.pauseall();
         }
-    },
-    mounted: function () {
-        // Build the url
-        let movie = this.$route.params.movie
-        this.url = "https://movies.solderneer.me/" + movie + '/' + movie + '.mpd'
-        // Setting up events for message handling
-        SessionService.isuser(function (res) {
-            if(res) {
-                // Message related callbacks for both admin and client
-                MessageService.receive(function (message) {
-                    // Input validation
-                    if (message === '') {
-                        return
+      }
+      this.play = !this.play;
+    }
+  },
+  mounted: function() {
+    // Setting up events for message handling
+    SessionService.isuser(
+      function(res) {
+        if (res) {
+          // Message related callbacks for both admin and client
+          MessageService.receive(
+            function(message) {
+              // Input validation
+              if (message === "") {
+                return;
+              }
+              this.messages.push({
+                name: message.name,
+                content: message.content,
+                self: false
+              });
+              // Remove the element after 5 seconds
+              setTimeout(() => {
+                this.messages.shift();
+              }, 5000);
+            }.bind(this)
+          );
+
+          SessionService.getmovie(function(movie) {
+            // Build the url
+            this.url = "https://movies.solderneer.me/" + movie + "/" + movie + ".mpd";
+
+            // Setting up video element for both admin and client
+            let dash = dashjs.MediaPlayer().create();
+            this.video = document.querySelector("#my-video");
+            dash.initialize(this.video, this.url, true);
+
+            // Progress bar support with time sync for admin
+            this.video.addEventListener(
+              "durationchange",
+              function() {
+                this.max = this.video.duration;
+                this.video.addEventListener(
+                  "timeupdate",
+                  function() {
+                    this.value = this.video.currentTime;
+                    // Video sync
+                    if (this.$route.params.state === "admin") {
+                      SyncService.sendtime(this.video.currentTime);
                     }
-                    this.messages.push({
-                        name: message.name,
-                        content: message.content,
-                        self: false,
-                    })
-                    // Remove the element after 5 seconds
-                    setTimeout(() => {
-                        this.messages.shift()
-                    }, 5000)
-                }.bind(this))
+                  }.bind(this)
+                );
+              }.bind(this)
+            );
 
-                 // Setting up video element for both admin and client
-                let dash = dashjs.MediaPlayer().create()
-                this.video = document.querySelector('#my-video')
-                dash.initialize(this.video, this.url, true)
+            if (this.$route.params.state === "client") {
+              // Video stream related client callbacks
+              SyncService.gettime(
+                function(time) {
+                  if (Math.abs(time - this.video.currentTime) > 0.05) {
+                    this.video.currentTime = time;
+                  }
+                }.bind(this)
+              );
 
-                 // Progress bar support with time sync for admin
-                this.video.addEventListener('durationchange', function() {
-                    this.max = this.video.duration
-                    this.video.addEventListener('timeupdate', function() {
-                        this.value = this.video.currentTime
-                        // Video sync
-                        if(this.$route.params.state === 'admin') {
-                            SyncService.sendtime(this.video.currentTime)
-                        }
-                    }.bind(this))
-                }.bind(this));
+              SyncService.onplay(
+                function() {
+                  this.video.play();
+                  this.play = false; // Show pause button
+                }.bind(this)
+              );
 
-                if(this.$route.params.state === 'client') {
-                    // Video stream related client callbacks
-                    SyncService.gettime(function (time) {
-                        if(Math.abs(time - this.video.currentTime) > 0.05) {
-                            this.video.currentTime = time
-                        }
-                    }.bind(this))
-
-                    SyncService.onplay(function () {
-                        this.video.play()
-                        this.play = false // Show pause button
-                    }.bind(this))
-
-                    SyncService.onpause(function () {
-                        this.video.pause()
-                        this.play = true // Show play button
-                    }.bind(this))
-                }
-
-                // Pause the video
-                this.video.pause()
-            } else {
-                this.disabled = true;
+              SyncService.onpause(
+                function() {
+                  this.video.pause();
+                  this.play = true; // Show play button
+                }.bind(this)
+              );
             }
-        }.bind(this))
-    },
-}
+          }.bind(this));
+        } else {
+          this.disabled = true;
+        }
+      }.bind(this)
+    );
+  }
+};
 </script>
 
 <style scoped>
@@ -182,40 +196,40 @@ export default {
 }
 
 .overlay {
-    position: absolute;
-    bottom: 0px;
-    width: 100vw;
+  position: absolute;
+  bottom: 0px;
+  width: 100vw;
 }
 
 .exit {
-    align-self: flex-start;
-    position: absolute;
-    top: 0px;
-    bottom: 0px;
-    margin: 20px;
+  align-self: flex-start;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  margin: 20px;
 
-    /* Make it circular */
-    width: 30px;
-    height: 30px;
-    border-radius: 15px;
-    overflow: hidden;
+  /* Make it circular */
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  overflow: hidden;
 }
 
 .play {
-    position: absolute;
-    margin: auto 0px;
+  position: absolute;
+  margin: auto 0px;
 
-    /* Make it circular */
-    width: 100px;
-    height: 100px;
-    border-radius: 50px;
-    overflow: hidden;
+  /* Make it circular */
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
+  overflow: hidden;
 
-    z-index: 1;
-    display: block;
+  z-index: 1;
+  display: block;
 }
 
 #my-video {
-    width: 100vw;
+  width: 100vw;
 }
 </style>

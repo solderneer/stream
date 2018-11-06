@@ -17,6 +17,7 @@ import DropDown from '@/components/DropDown.vue'
 import ButtomField from '@/components/ButtonField.vue'
 
 import FileService from '@/services/FileService.js'
+import SessionService from '@/services/SessionService.js'
 
 export default {
     name: 'File',
@@ -33,7 +34,8 @@ export default {
     },
     methods: {
         onCreate: function () {
-            this.$router.push('/watch/admin/' + this.selected)
+            SessionService.setmovie(this.selected)
+            this.$router.push('/watch/admin')
         }
     },
     mounted: async function () {
