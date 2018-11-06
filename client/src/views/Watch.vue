@@ -151,7 +151,7 @@ export default {
               // Video stream related client callbacks
               SyncService.gettime(
                 function(time) {
-                  if (Math.abs(time - this.video.currentTime) > 0.05) {
+                  if (Math.abs(time - this.video.currentTime) > 2) {
                     this.video.currentTime = time;
                   }
                 }.bind(this)
