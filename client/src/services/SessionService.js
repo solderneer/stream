@@ -26,6 +26,16 @@ function create_session(secret, nickname, callback) {
     }
 }
 
+function setmovie(movie) {
+    socket.emit('setmovie', movie)
+}
+
+function getmovie(callback) {
+    socket.emit('getmovie', (res) => {
+        callback(res)
+    })
+}
+
 function isuser(callback) {
     socket.emit('isuser', (res) => {
         callback(res)
@@ -41,4 +51,6 @@ export default {
     create_session,
     isuser,
     leave_session,
+    setmovie,
+    getmovie,
 }

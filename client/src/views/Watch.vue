@@ -49,7 +49,7 @@ export default {
             max: 100,
             video: null,
             url: '',
-            play: true,
+            play: false,
         }
     },
     methods: {
@@ -156,9 +156,6 @@ export default {
                         this.play = true // Show play button
                     }.bind(this))
                 }
-
-                // Pause the video
-                this.video.pause()
             } else {
                 this.disabled = true;
             }

@@ -32,6 +32,13 @@ io.on('connection', function (socket) {
   socket.on('videotime', function (time) {
     SyncHandler.sendtime(socket, time)
   })
+  socket.on('setmovie', function (movie) {
+    SessionHandler.setmovie(socket, movie)
+  })
+  socket.on('getmovie', function (callback) {
+    let res = SessionHandler.getmovie(socket)
+    callback(res)
+  })
   socket.on('play', function () {
     SyncHandler.play(socket)
   })
