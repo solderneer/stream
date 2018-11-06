@@ -7,7 +7,7 @@
         </span>
         <span class="play">
             <floating-button v-on:click="onToggle">
-                <span class="text text-lg fa" v-bind:class="{ 'fa-play': play, 'fa-pause': !play }"></span>
+                <span class="text text-lg fa" v-bind:class="{ 'fa-play': play, 'fa-pause': !play, 'hidden': !admin}"></span>
             </floating-button>
         </span>
         <video id="my-video"></video>
@@ -48,7 +48,8 @@ export default {
       max: 100,
       video: null,
       url: "",
-      play: false
+      play: false,
+      admin: false,
     };
   },
   methods: {
@@ -73,23 +74,27 @@ export default {
       MessageService.send(message);
     },
     onDrag: function(position) {
-      this.value = position * this.max;
-      this.video.currentTime = position * this.max;
+      if(this.admin) {
+        this.value = position * this.max;
+        this.video.currentTime = position * this.max;
+      }
     },
     onJump: function(position) {
-      this.video.currentTime = position * this.max;
+      if(this.admin) {
+        this.video.currentTime = position * this.max;
+      }
     },
     onToggle: function() {
       if (this.play) {
         this.video.play();
         // Video sync
-        if (this.$route.params.state === "admin") {
+        if (this.admin) {
           SyncService.playall();
         }
       } else {
         this.video.pause();
         // Video sync
-        if (this.$route.params.state === "admin") {
+        if (this.admin) {
           SyncService.pauseall();
         }
       }
@@ -97,6 +102,8 @@ export default {
     }
   },
   mounted: function() {
+    // Setting up data attribute
+    this.admin = (this.$route.params.state === 'admin')
     // Setting up events for message handling
     SessionService.isuser(
       function(res) {
@@ -120,58 +127,62 @@ export default {
             }.bind(this)
           );
 
-          SessionService.getmovie(function(movie) {
-            // Build the url
-            this.url = "https://movies.solderneer.me/" + movie + "/" + movie + ".mpd";
+          SessionService.getmovie(
+            function(movie) {
+              // Build the url
+              this.url =
+                "https://movies.solderneer.me/" + movie + "/" + movie + ".mpd";
 
-            // Setting up video element for both admin and client
-            let dash = dashjs.MediaPlayer().create();
-            this.video = document.querySelector("#my-video");
-            dash.initialize(this.video, this.url, true);
+              // Setting up video element for both admin and client (and suppress warning)
+              // eslint-disable-next-line
+              let dash = dashjs.MediaPlayer().create();
+              this.video = document.querySelector("#my-video");
+              dash.initialize(this.video, this.url, true);
 
-            // Progress bar support with time sync for admin
-            this.video.addEventListener(
-              "durationchange",
-              function() {
-                this.max = this.video.duration;
-                this.video.addEventListener(
-                  "timeupdate",
-                  function() {
-                    this.value = this.video.currentTime;
-                    // Video sync
-                    if (this.$route.params.state === "admin") {
-                      SyncService.sendtime(this.video.currentTime);
+              // Progress bar support with time sync for admin
+              this.video.addEventListener(
+                "durationchange",
+                function() {
+                  this.max = this.video.duration;
+                  this.video.addEventListener(
+                    "timeupdate",
+                    function() {
+                      this.value = this.video.currentTime;
+                      // Video sync
+                      if (this.admin) {
+                        SyncService.sendtime(this.video.currentTime);
+                      }
+                    }.bind(this)
+                  );
+                }.bind(this)
+              );
+
+              if (!this.admin) {
+                // Video stream related client callbacks
+                SyncService.gettime(
+                  function(time) {
+                    if (Math.abs(time - this.video.currentTime) > 2) {
+                      this.video.currentTime = time;
                     }
                   }.bind(this)
                 );
-              }.bind(this)
-            );
 
-            if (this.$route.params.state === "client") {
-              // Video stream related client callbacks
-              SyncService.gettime(
-                function(time) {
-                  if (Math.abs(time - this.video.currentTime) > 2) {
-                    this.video.currentTime = time;
-                  }
-                }.bind(this)
-              );
+                SyncService.onplay(
+                  function() {
+                    this.video.play();
+                    this.play = false; // Show pause button
+                  }.bind(this)
+                );
 
-              SyncService.onplay(
-                function() {
-                  this.video.play();
-                  this.play = false; // Show pause button
-                }.bind(this)
-              );
-
-              SyncService.onpause(
-                function() {
-                  this.video.pause();
-                  this.play = true; // Show play button
-                }.bind(this)
-              );
-            }
-          }.bind(this));
+                SyncService.onpause(
+                  function() {
+                    this.video.pause();
+                    this.play = true; // Show play button
+                  }.bind(this)
+                );
+              }
+            }.bind(this)
+          );
         } else {
           this.disabled = true;
         }
@@ -213,6 +224,10 @@ export default {
   height: 30px;
   border-radius: 15px;
   overflow: hidden;
+}
+
+.hidden {
+  display: none;
 }
 
 .play {
