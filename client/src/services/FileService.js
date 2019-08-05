@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export default {
     getfilelist: async function () {
-        let res = await axios.get('https://movies.solderneer.me')
+        let res = await axios.get('https://streamfiles.solderneer.me')
 
         // Extracting list
         let container = document.createElement('html')

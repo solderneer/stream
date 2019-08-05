@@ -4,20 +4,45 @@ services:
   backend:
     build: ./server
     command: npm run dev
+    networks:
+      - proxy
+      - default
+    labels:
+      - "traefik.backend=stream-server"
+      - "traefik.docker.network=proxy"
+      - "traefik.basic.frontend.rule=Host:streamserver.solderneer.me"
+      - "traefik.enable=true"
+      - "traefik.basic.port=3000"
     volumes: 
       - ./server:/app
-    ports: 
-      - "3000:3000"
   frontend:
     build: ./client
     command: npm run serve
     volumes:
       - ./client:/app
-    ports:
-      - "80:8080"
+    networks:
+      - proxy
+      - default
+    labels:
+      - "traefik.backend=stream"
+      - "traefik.docker.network=proxy"
+      - "traefik.basic.frontend.rule=Host:stream.solderneer.me"
+      - "traefik.enable=true"
+      - "traefik.basic.port=8080"
   file-server:
     build: ./file-server
     volumes:
       - ./movies:/etc/nginx/movies
-    ports:
-      - "1000:80"
+    networks:
+      - proxy
+      - default
+    labels:
+      - "traefik.backend=stream-files"
+      - "traefik.docker.network=proxy"
+      - "traefik.basic.frontend.rule=Host:streamfiles.solderneer.me"
+      - "traefik.enable=true"
+      - "traefik.basic.port=80"
+
+networks:
+  proxy:
+    external: true

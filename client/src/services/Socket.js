@@ -1,6 +1,6 @@
 import io from 'socket.io-client'
 
-const baseURL = 'http://localhost:3000'
+const baseURL = 'https://streamserver.solderneer.me'
 const socket = io(baseURL)
 
 export default socket
